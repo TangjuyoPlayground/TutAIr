@@ -1,0 +1,106 @@
+.explanation-module {
+    line-height: 1.7;
+}
+
+.explanation-content {
+    color: hsl(var(--foreground));
+}
+
+.explanation-content h2,
+.explanation-content h3,
+.explanation-content h4 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.explanation-content h2:first-child,
+.explanation-content h3:first-child,
+.explanation-content h4:first-child {
+    margin-top: 0;
+}
+
+.explanation-content p {
+    margin-bottom: 0.75rem;
+}
+
+.explanation-content ul,
+.explanation-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.explanation-content li {
+    margin-bottom: 0.375rem;
+}
+
+/* Code blocks */
+.code-block {
+    position: relative;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.875rem;
+}
+
+.code-lang {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+    letter-spacing: 0.05em;
+}
+
+.code-block code {
+    color: hsl(var(--foreground));
+}
+
+.inline-code {
+    background: hsl(var(--muted));
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.875em;
+}
+
+/* Key Points */
+.key-points {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background: hsl(var(--muted) / 0.5);
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+}
+
+.key-points-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: hsl(var(--foreground));
+}
+
+.key-points ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.key-points li {
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 0.375rem;
+}
+
+.key-points li:last-child {
+    margin-bottom: 0;
+}
+
+.text-content {
+    margin-bottom: 0.5rem;
+}

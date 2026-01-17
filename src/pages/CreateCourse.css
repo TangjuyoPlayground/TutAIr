@@ -1,0 +1,157 @@
+.create-page {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-bottom: 1.5rem;
+}
+
+.back-btn:hover {
+    color: hsl(var(--foreground));
+}
+
+.create-header {
+    margin-bottom: 2rem;
+}
+
+.create-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.create-header p {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.6;
+}
+
+.create-form .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
+}
+
+/* Level Options */
+.level-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.level-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding: 1rem;
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+}
+
+.level-option:hover:not(:disabled) {
+    border-color: hsl(var(--muted-foreground) / 0.3);
+}
+
+.level-option.active {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--muted));
+}
+
+.level-option:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.level-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+}
+
+.level-desc {
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Error */
+.error-message {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: hsl(var(--destructive));
+    background: hsl(var(--destructive) / 0.1);
+    border-radius: var(--radius);
+}
+
+/* Submit */
+.create-form .card-footer {
+    padding-top: 0;
+}
+
+.submit-btn {
+    width: 100%;
+}
+
+/* Loading */
+.loading-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid hsl(var(--muted));
+    border-top-color: hsl(var(--primary));
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-info p {
+    color: hsl(var(--foreground));
+    font-weight: 500;
+}
+
+.loading-hint {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground)) !important;
+    font-weight: 400 !important;
+}

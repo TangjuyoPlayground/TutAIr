@@ -1,0 +1,127 @@
+.fillblank-module {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.fillblank-content {
+    font-size: 1rem;
+    line-height: 2;
+    color: hsl(var(--foreground));
+}
+
+.blank-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.blank-input {
+    display: inline-block;
+    min-width: 60px;
+    padding: 0.25rem 0.5rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    text-align: center;
+    color: hsl(var(--foreground));
+    background: hsl(var(--muted));
+    border: 1px dashed hsl(var(--border));
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+}
+
+.blank-input:focus {
+    outline: none;
+    border-style: solid;
+    border-color: hsl(var(--ring));
+}
+
+.blank-input:disabled {
+    cursor: not-allowed;
+}
+
+.blank-input.correct {
+    background: hsl(var(--success) / 0.1);
+    border-color: hsl(var(--success));
+    border-style: solid;
+    color: hsl(var(--success));
+}
+
+.blank-input.incorrect {
+    background: hsl(var(--destructive) / 0.1);
+    border-color: hsl(var(--destructive));
+    border-style: solid;
+    color: hsl(var(--destructive));
+    text-decoration: line-through;
+}
+
+.hint-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    background: hsl(var(--warning) / 0.1);
+    border: none;
+    border-radius: 50%;
+    color: hsl(var(--warning));
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.hint-toggle:hover {
+    background: hsl(var(--warning) / 0.2);
+}
+
+.blank-hint {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    color: hsl(var(--warning));
+    background: hsl(var(--warning) / 0.1);
+    border: 1px solid hsl(var(--warning) / 0.3);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    margin-top: 0.25rem;
+}
+
+.correct-answer {
+    font-size: 0.75rem;
+    color: hsl(var(--success));
+    font-weight: 500;
+}
+
+/* Results */
+.fillblank-results {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+}
+
+.fillblank-results.success {
+    background: hsl(var(--success) / 0.1);
+    color: hsl(var(--success));
+}
+
+.fillblank-results.partial {
+    background: hsl(var(--warning) / 0.1);
+    color: hsl(var(--warning));
+}
+
+.results-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Actions */
+.fillblank-actions {
+    display: flex;
+    justify-content: flex-end;
+}
