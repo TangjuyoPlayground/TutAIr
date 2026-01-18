@@ -67,19 +67,19 @@ function Home() {
                     <div className="courses-grid">
                         {courses.map((course, index) => (
                             <motion.div
-                                key={course.id}
+                                key={course._id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1 * index }}
                             >
-                                <Link to={`/course/${course.id}`} className="course-link">
+                                <Link to={`/course/${course._id}`} className="course-link">
                                     <Card hover className="course-card">
                                         <Card.Header>
                                             <div className="course-header-row">
                                                 <Card.Title>{course.title}</Card.Title>
                                                 <button
                                                     className="delete-btn"
-                                                    onClick={(e) => handleDelete(e, course.id)}
+                                                    onClick={(e) => handleDelete(e, course._id)}
                                                     aria-label={t('deleteCourse')}
                                                 >
                                                     <IconTrash size={18} />
