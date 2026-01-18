@@ -30,8 +30,16 @@ export default defineSchema({
         progress: v.float64(),
         completedModules: v.array(v.string()),
         lang: v.string(),
+        // Marketplace fields
+        isPublic: v.optional(v.boolean()),
+        tags: v.optional(v.array(v.string())),
+        authorName: v.optional(v.string()),
+        // For cloned courses
+        originalCourseId: v.optional(v.id("courses")),
     })
         .index("by_user", ["userId"])
-        .index("by_user_and_title", ["userId", "title"]),
+        .index("by_user_and_title", ["userId", "title"])
+        .index("by_public", ["isPublic"]),
 });
+
 

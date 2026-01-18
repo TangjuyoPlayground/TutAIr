@@ -43,3 +43,25 @@ export function useCourse(id) {
         updateProgress,
     }
 }
+
+export function useMarketplace(filters = {}) {
+    const { tags = [], search = '' } = filters
+    const courses = useQuery(api.courses.getPublicCourses, {
+        tags: tags.length > 0 ? tags : undefined,
+        search: search || undefined,
+    }) ?? []
+    const popularTags = useQuery(api.courses.getPopularTags) ?? []
+    const cloneCourseMutation = useMutation(api.courses.cloneCourse)
+
+    const cloneCourse = async (courseId) => {
+        return await cloneCourseMutation({ courseId })
+    }
+
+    return {
+        courses,
+        popularTags,
+        isLoading: courses === undefined,
+        cloneCourse,
+    }
+}
+

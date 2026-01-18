@@ -110,6 +110,35 @@
     border-radius: var(--radius);
 }
 
+/* Publish Option */
+.publish-option {
+    padding: 1rem;
+    background: hsl(var(--muted));
+    border-radius: var(--radius);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    accent-color: hsl(var(--primary));
+    cursor: pointer;
+}
+
+.publish-hint {
+    margin-top: 0.5rem;
+    margin-left: 1.875rem;
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+}
+
 /* Submit */
 .create-form .card-footer {
     padding-top: 0;

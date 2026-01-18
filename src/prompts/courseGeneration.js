@@ -1,5 +1,5 @@
 export const COURSE_GENERATION_PROMPT = {
-    fr: `Tu es un expert pédagogique. Tu dois créer un cours structuré sur le sujet demandé.
+  fr: `Tu es un expert pédagogique. Tu dois créer un cours structuré sur le sujet demandé.
 
 IMPORTANT: Tu dois retourner UNIQUEMENT du JSON valide, sans markdown, sans commentaires, sans texte avant ou après.
 Tu DOIS répondre entièrement en FRANÇAIS.
@@ -17,6 +17,7 @@ Structure JSON attendue:
   "description": "Description courte du cours",
   "level": "beginner|intermediate|advanced",
   "estimatedTime": "Durée estimée (ex: 2h)",
+  "tags": ["tag1", "tag2", "tag3"],
   "modules": [
     {
       "id": "unique-id",
@@ -83,9 +84,10 @@ Structure JSON attendue:
 
 Choisis les types de modules les plus pertinents pour le sujet. Alterne entre théorie et pratique.
 Génère au moins 5-8 modules pour un cours complet.
-Les IDs doivent être uniques (utilise des slugs comme "intro-1", "exercise-arrays-1", etc.).`,
+Les IDs doivent être uniques (utilise des slugs comme "intro-1", "exercise-arrays-1", etc.).
+Génère 3 à 5 tags pertinents décrivant le sujet du cours (ex: ["programmation", "python", "débutant"]).`,
 
-    en: `You are a pedagogical expert. You must create a structured course on the requested subject.
+  en: `You are a pedagogical expert. You must create a structured course on the requested subject.
 
 IMPORTANT: You must return ONLY valid JSON, without markdown, without comments, without text before or after.
 You MUST respond entirely in ENGLISH.
@@ -103,6 +105,7 @@ Expected JSON structure:
   "description": "Short course description",
   "level": "beginner|intermediate|advanced",
   "estimatedTime": "Estimated duration (e.g., 2h)",
+  "tags": ["tag1", "tag2", "tag3"],
   "modules": [
     {
       "id": "unique-id",
@@ -169,9 +172,10 @@ Expected JSON structure:
 
 Choose the most relevant module types for the subject. Alternate between theory and practice.
 Generate at least 5-8 modules for a complete course.
-IDs must be unique (use slugs like "intro-1", "exercise-arrays-1", etc.).`,
+IDs must be unique (use slugs like "intro-1", "exercise-arrays-1", etc.).
+Generate 3 to 5 relevant tags describing the course topic (e.g., ["programming", "python", "beginner"]).`,
 
-    es: `Eres un experto pedagógico. Debes crear un curso estructurado sobre el tema solicitado.
+  es: `Eres un experto pedagógico. Debes crear un curso estructurado sobre el tema solicitado.
 
 IMPORTANTE: Debes devolver SOLO JSON válido, sin markdown, sin comentarios, sin texto antes o después.
 DEBES responder completamente en ESPAÑOL.
@@ -189,6 +193,7 @@ Estructura JSON esperada:
   "description": "Descripción breve del curso",
   "level": "beginner|intermediate|advanced",
   "estimatedTime": "Duración estimada (ej: 2h)",
+  "tags": ["tag1", "tag2", "tag3"],
   "modules": [
     {
       "id": "unique-id",
@@ -255,32 +260,33 @@ Estructura JSON esperada:
 
 Elige los tipos de módulos más relevantes para el tema. Alterna entre teoría y práctica.
 Genera al menos 5-8 módulos para un curso completo.
-Los IDs deben ser únicos (usa slugs como "intro-1", "exercise-arrays-1", etc.).`
+Los IDs deben ser únicos (usa slugs como "intro-1", "exercise-arrays-1", etc.).
+Genera de 3 a 5 tags relevantes describiendo el tema del curso (ej: ["programación", "python", "principiante"]).`
 }
 
 export const LEVEL_LABELS = {
-    fr: {
-        beginner: 'Débutant',
-        intermediate: 'Intermédiaire',
-        advanced: 'Avancé'
-    },
-    en: {
-        beginner: 'Beginner',
-        intermediate: 'Intermediate',
-        advanced: 'Advanced'
-    },
-    es: {
-        beginner: 'Principiante',
-        intermediate: 'Intermedio',
-        advanced: 'Avanzado'
-    }
+  fr: {
+    beginner: 'Débutant',
+    intermediate: 'Intermédiaire',
+    advanced: 'Avancé'
+  },
+  en: {
+    beginner: 'Beginner',
+    intermediate: 'Intermediate',
+    advanced: 'Advanced'
+  },
+  es: {
+    beginner: 'Principiante',
+    intermediate: 'Intermedio',
+    advanced: 'Avanzado'
+  }
 }
 
 export const getGenerationPrompt = (lang, subject, level) => {
-    const levelLabel = LEVEL_LABELS[lang]?.[level] || level
-    const basePrompt = COURSE_GENERATION_PROMPT[lang] || COURSE_GENERATION_PROMPT.en
+  const levelLabel = LEVEL_LABELS[lang]?.[level] || level
+  const basePrompt = COURSE_GENERATION_PROMPT[lang] || COURSE_GENERATION_PROMPT.en
 
-    return `${basePrompt}
+  return `${basePrompt}
 
 Subject: ${subject}
 Level: ${levelLabel}

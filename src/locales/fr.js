@@ -122,5 +122,22 @@ export default {
     noAccount: 'Pas encore de compte ?',
     hasAccount: 'Déjà un compte ?',
     welcome: 'Bienvenue',
+
+    // Marketplace
+    market: 'Marché',
+    marketplace: 'Marketplace',
+    marketplaceDescription: 'Découvrez les cours partagés par la communauté',
+    searchCourses: 'Rechercher des cours...',
+    filterByTags: 'Filtrer par tags',
+    clearFilters: 'Effacer les filtres',
+    noCoursesFound: 'Aucun cours trouvé',
+    noCoursesFoundDesc: 'Essayez de modifier vos filtres ou revenez plus tard',
+    addToMyCourses: 'Ajouter à mes cours',
+    added: 'Ajouté !',
+    by: 'par',
+    coursesFound: 'cours trouvés',
+    publishToMarket: 'Publier sur le marketplace',
+    publishToMarketHint: 'Votre cours sera visible par tous les utilisateurs et pourra être ajouté à leur collection',
 }
+
 

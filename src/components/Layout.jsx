@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { IconBook2, IconPlus, IconSun, IconMoon, IconLanguage, IconCheck, IconLogout, IconUser } from '@tabler/icons-react'
+import { IconBook2, IconPlus, IconSun, IconMoon, IconLanguage, IconCheck, IconLogout, IconUser, IconBuildingStore } from '@tabler/icons-react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useApp } from '../context/AppContext'
@@ -51,6 +51,10 @@ function Layout() {
                     <Link to="/" className="logo">
                         <IconBook2 size={28} stroke={1.5} />
                         <span>{t('appName')}</span>
+                    </Link>
+                    <Link to="/market" className={`market-link ${location.pathname === '/market' ? 'active' : ''}`}>
+                        <IconBuildingStore size={20} />
+                        <span>{t('market')}</span>
                     </Link>
                     <nav className="nav">
                         {/* Language Selector */}
