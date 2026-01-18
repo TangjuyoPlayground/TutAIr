@@ -25,29 +25,8 @@ export default defineSchema({
         description: v.string(),
         level: v.string(), // 'beginner' | 'intermediate' | 'advanced'
         estimatedTime: v.optional(v.string()),
-        modules: v.array(
-            v.object({
-                id: v.string(),
-                type: v.string(), // 'explanation' | 'exercise' | 'quiz' | 'fillblank' | 'dragdrop'
-                title: v.string(),
-                content: v.optional(v.string()),
-                // Quiz specific
-                question: v.optional(v.string()),
-                options: v.optional(v.array(v.string())),
-                correctAnswer: v.optional(v.union(v.string(), v.float64())),
-                explanation: v.optional(v.string()),
-                // Exercise specific
-                instructions: v.optional(v.string()),
-                hints: v.optional(v.array(v.string())),
-                solution: v.optional(v.string()),
-                // Fill blank specific
-                sentence: v.optional(v.string()),
-                blanks: v.optional(v.array(v.string())),
-                // Drag and drop specific
-                items: v.optional(v.array(v.string())),
-                correctOrder: v.optional(v.array(v.string())),
-            })
-        ),
+        // Using v.any() for modules since AI generates varying structures
+        modules: v.array(v.any()),
         progress: v.float64(),
         completedModules: v.array(v.string()),
         lang: v.string(),
@@ -55,3 +34,4 @@ export default defineSchema({
         .index("by_user", ["userId"])
         .index("by_user_and_title", ["userId", "title"]),
 });
+

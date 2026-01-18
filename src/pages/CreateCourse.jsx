@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { IconSparkles, IconArrowLeft } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
-import { generateCourse, saveCourse } from '../services/aiService'
+import { generateCourse } from '../services/aiService'
+import { useCourses } from '../hooks/useCourses'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Textarea from '../components/ui/Textarea'
@@ -13,6 +14,7 @@ import './CreateCourse.css'
 function CreateCourse() {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
+    const { createCourse } = useCourses()
     const [subject, setSubject] = useState('')
     const [details, setDetails] = useState('')
     const [level, setLevel] = useState('beginner')
@@ -38,8 +40,18 @@ function CreateCourse() {
         try {
             const fullSubject = details ? `${subject}. ${details}` : subject
             const course = await generateCourse(fullSubject, level, i18n.language)
-            saveCourse(course)
-            navigate(`/course/${course.id}`)
+
+            // Save to Convex database
+            const courseId = await createCourse({
+                title: course.title,
+                description: course.description,
+                level: course.level,
+                estimatedTime: course.estimatedTime,
+                modules: course.modules,
+                lang: course.lang || i18n.language,
+            })
+
+            navigate(`/course/${courseId}`)
         } catch (err) {
             setError(err.message)
         } finally {

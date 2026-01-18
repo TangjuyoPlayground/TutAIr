@@ -46,6 +46,7 @@ export default {
     next: 'Next',
     markAsRead: 'Mark as read',
     finishCourse: 'Finish course',
+    loading: 'Loading...',
 
     // Modules
     explanation: 'Explanation',
@@ -96,4 +97,30 @@ export default {
     // Theme
     lightMode: 'Light mode',
     darkMode: 'Dark mode',
+
+    // Auth
+    login: 'Login',
+    logout: 'Logout',
+    register: 'Register',
+    email: 'Email',
+    emailPlaceholder: 'your@email.com',
+    password: 'Password',
+    passwordPlaceholder: 'Enter your password',
+    confirmPassword: 'Confirm password',
+    confirmPasswordPlaceholder: 'Confirm your password',
+    name: 'Name',
+    namePlaceholder: 'Your name',
+    loginDescription: 'Sign in to access your courses',
+    registerDescription: 'Create an account to save your courses',
+    fillAllFields: 'Please fill in all fields',
+    loginError: 'Login failed. Please check your credentials.',
+    registerError: 'Registration failed. Please try again.',
+    passwordMismatch: 'Passwords do not match',
+    passwordTooShort: 'Password must be at least 6 characters',
+    or: 'or',
+    loginWithGoogle: 'Continue with Google',
+    noAccount: "Don't have an account?",
+    hasAccount: 'Already have an account?',
+    welcome: 'Welcome',
 }
+

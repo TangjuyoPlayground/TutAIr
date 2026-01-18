@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { IconSparkles, IconBook, IconClock, IconChevronRight, IconTrash } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
-import { getCourses, deleteCourse } from '../services/aiService'
+import { useCourses } from '../hooks/useCourses'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
 import Progress from '../components/ui/Progress'
@@ -11,19 +10,14 @@ import Badge from '../components/ui/Badge'
 import './Home.css'
 
 function Home() {
-    const [courses, setCourses] = useState([])
+    const { courses, isLoading, deleteCourse } = useCourses()
     const { t } = useTranslation()
 
-    useEffect(() => {
-        setCourses(getCourses())
-    }, [])
-
-    const handleDelete = (e, courseId) => {
+    const handleDelete = async (e, courseId) => {
         e.preventDefault()
         e.stopPropagation()
         if (window.confirm(t('deleteConfirm'))) {
-            deleteCourse(courseId)
-            setCourses(getCourses())
+            await deleteCourse(courseId)
         }
     }
 

@@ -24,12 +24,8 @@ export async function generateCourse(subject, level = 'beginner', lang = 'en') {
 
     const course = JSON.parse(text)
 
-    // Add metadata
-    course.id = generateId()
-    course.createdAt = new Date().toISOString()
-    course.progress = 0
-    course.completedModules = []
-    course.lang = lang // Store the course language
+    // Add metadata - Note: ID is now handled by Convex
+    course.lang = lang
 
     return course
   } catch (error) {
@@ -38,54 +34,3 @@ export async function generateCourse(subject, level = 'beginner', lang = 'en') {
   }
 }
 
-function generateId() {
-  return 'course-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9)
-}
-
-// Local storage helpers
-export function saveCourse(course) {
-  const courses = getCourses()
-  const existingIndex = courses.findIndex(c => c.id === course.id)
-
-  if (existingIndex >= 0) {
-    courses[existingIndex] = course
-  } else {
-    courses.unshift(course)
-  }
-
-  localStorage.setItem('tutair-courses', JSON.stringify(courses))
-  return course
-}
-
-export function getCourses() {
-  try {
-    return JSON.parse(localStorage.getItem('tutair-courses') || '[]')
-  } catch {
-    return []
-  }
-}
-
-export function getCourse(id) {
-  const courses = getCourses()
-  return courses.find(c => c.id === id)
-}
-
-export function deleteCourse(id) {
-  const courses = getCourses().filter(c => c.id !== id)
-  localStorage.setItem('tutair-courses', JSON.stringify(courses))
-}
-
-export function updateCourseProgress(courseId, moduleId, completed) {
-  const course = getCourse(courseId)
-  if (!course) return null
-
-  if (completed && !course.completedModules.includes(moduleId)) {
-    course.completedModules.push(moduleId)
-  } else if (!completed) {
-    course.completedModules = course.completedModules.filter(id => id !== moduleId)
-  }
-
-  course.progress = Math.round((course.completedModules.length / course.modules.length) * 100)
-
-  return saveCourse(course)
-}

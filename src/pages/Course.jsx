@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconArrowLeft, IconChevronLeft, IconChevronRight, IconCheck } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
-import { getCourse, updateCourseProgress } from '../services/aiService'
+import { useCourse } from '../hooks/useCourses'
 import Progress from '../components/ui/Progress'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
@@ -18,26 +18,26 @@ function Course() {
     const { id } = useParams()
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const [course, setCourse] = useState(null)
+    const { course, isLoading, updateProgress } = useCourse(id)
     const [currentModuleIndex, setCurrentModuleIndex] = useState(0)
     const [moduleCompleted, setModuleCompleted] = useState(false)
 
     useEffect(() => {
-        const courseData = getCourse(id)
-        if (!courseData) {
+        if (!isLoading && !course) {
             navigate('/')
             return
         }
-        setCourse(courseData)
 
-        // Find first incomplete module
-        const firstIncomplete = courseData.modules.findIndex(
-            m => !courseData.completedModules?.includes(m.id)
-        )
-        if (firstIncomplete >= 0) {
-            setCurrentModuleIndex(firstIncomplete)
+        if (course) {
+            // Find first incomplete module
+            const firstIncomplete = course.modules.findIndex(
+                m => !course.completedModules?.includes(m.id)
+            )
+            if (firstIncomplete >= 0) {
+                setCurrentModuleIndex(firstIncomplete)
+            }
         }
-    }, [id, navigate])
+    }, [course, isLoading, navigate])
 
     useEffect(() => {
         if (course) {
@@ -46,10 +46,10 @@ function Course() {
         }
     }, [course, currentModuleIndex])
 
-    if (!course) {
+    if (isLoading || !course) {
         return (
             <div className="container">
-                <div className="loading-state">Loading...</div>
+                <div className="loading-state">{t('loading') || 'Loading...'}</div>
             </div>
         )
     }
@@ -70,9 +70,8 @@ function Course() {
         }
     }
 
-    const handleComplete = () => {
-        const updated = updateCourseProgress(course.id, currentModule.id, true)
-        setCourse(updated)
+    const handleComplete = async () => {
+        await updateProgress(currentModule.id, true)
         setModuleCompleted(true)
     }
 

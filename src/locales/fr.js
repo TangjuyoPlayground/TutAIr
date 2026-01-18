@@ -46,6 +46,7 @@ export default {
     next: 'Suivant',
     markAsRead: 'Marquer comme lu',
     finishCourse: 'Terminer le cours',
+    loading: 'Chargement...',
 
     // Modules
     explanation: 'Explication',
@@ -96,4 +97,30 @@ export default {
     // Theme
     lightMode: 'Mode clair',
     darkMode: 'Mode sombre',
+
+    // Auth
+    login: 'Connexion',
+    logout: 'Déconnexion',
+    register: 'Inscription',
+    email: 'Email',
+    emailPlaceholder: 'votre@email.com',
+    password: 'Mot de passe',
+    passwordPlaceholder: 'Entrez votre mot de passe',
+    confirmPassword: 'Confirmer le mot de passe',
+    confirmPasswordPlaceholder: 'Confirmez votre mot de passe',
+    name: 'Nom',
+    namePlaceholder: 'Votre nom',
+    loginDescription: 'Connectez-vous pour accéder à vos cours',
+    registerDescription: 'Créez un compte pour sauvegarder vos cours',
+    fillAllFields: 'Veuillez remplir tous les champs',
+    loginError: 'Échec de la connexion. Vérifiez vos identifiants.',
+    registerError: 'Échec de l\'inscription. Veuillez réessayer.',
+    passwordMismatch: 'Les mots de passe ne correspondent pas',
+    passwordTooShort: 'Le mot de passe doit contenir au moins 6 caractères',
+    or: 'ou',
+    loginWithGoogle: 'Continuer avec Google',
+    noAccount: 'Pas encore de compte ?',
+    hasAccount: 'Déjà un compte ?',
+    welcome: 'Bienvenue',
 }
+

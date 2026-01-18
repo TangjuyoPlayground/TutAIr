@@ -2,25 +2,6 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { auth } from "./auth";
 
-// Module schema validator
-const moduleValidator = v.object({
-    id: v.string(),
-    type: v.string(),
-    title: v.string(),
-    content: v.optional(v.string()),
-    question: v.optional(v.string()),
-    options: v.optional(v.array(v.string())),
-    correctAnswer: v.optional(v.union(v.string(), v.float64())),
-    explanation: v.optional(v.string()),
-    instructions: v.optional(v.string()),
-    hints: v.optional(v.array(v.string())),
-    solution: v.optional(v.string()),
-    sentence: v.optional(v.string()),
-    blanks: v.optional(v.array(v.string())),
-    items: v.optional(v.array(v.string())),
-    correctOrder: v.optional(v.array(v.string())),
-});
-
 // Get all courses for the current user
 export const getCourses = query({
     args: {},
@@ -59,7 +40,8 @@ export const createCourse = mutation({
         description: v.string(),
         level: v.string(),
         estimatedTime: v.optional(v.string()),
-        modules: v.array(moduleValidator),
+        // Using v.any() since AI generates varying module structures
+        modules: v.array(v.any()),
         lang: v.string(),
     },
     handler: async (ctx, args) => {

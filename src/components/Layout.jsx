@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { IconBook2, IconPlus, IconSun, IconMoon, IconLanguage, IconCheck } from '@tabler/icons-react'
+import { IconBook2, IconPlus, IconSun, IconMoon, IconLanguage, IconCheck, IconLogout, IconUser } from '@tabler/icons-react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useApp } from '../context/AppContext'
+import { useAuth } from '../hooks/useAuth'
 import './Layout.css'
 
 const LANGUAGES = [
@@ -16,14 +17,20 @@ function Layout() {
     const location = useLocation()
     const { t, i18n } = useTranslation()
     const { theme, toggleTheme, setLang } = useApp()
+    const { user, signOut } = useAuth()
     const [langMenuOpen, setLangMenuOpen] = useState(false)
+    const [userMenuOpen, setUserMenuOpen] = useState(false)
     const langMenuRef = useRef(null)
+    const userMenuRef = useRef(null)
 
-    // Close menu when clicking outside
+    // Close menus when clicking outside
     useEffect(() => {
         function handleClickOutside(event) {
             if (langMenuRef.current && !langMenuRef.current.contains(event.target)) {
                 setLangMenuOpen(false)
+            }
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+                setUserMenuOpen(false)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
@@ -31,6 +38,11 @@ function Layout() {
     }, [])
 
     const currentLang = LANGUAGES.find(l => l.code === i18n.language)
+
+    const handleLogout = async () => {
+        await signOut()
+        setUserMenuOpen(false)
+    }
 
     return (
         <div className="layout">
@@ -89,6 +101,29 @@ function Layout() {
                             <IconPlus size={20} stroke={1.5} />
                             <span>{t('newCourse')}</span>
                         </Link>
+
+                        {/* User Menu */}
+                        <div className="user-menu-container" ref={userMenuRef}>
+                            <button
+                                className="user-btn"
+                                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                aria-label="User menu"
+                            >
+                                <IconUser size={20} />
+                                {user?.name && <span className="user-name">{user.name}</span>}
+                            </button>
+                            {userMenuOpen && (
+                                <div className="user-menu">
+                                    {user?.email && (
+                                        <div className="user-email">{user.email}</div>
+                                    )}
+                                    <button className="user-option logout" onClick={handleLogout}>
+                                        <IconLogout size={16} />
+                                        <span>{t('logout')}</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </nav>
                 </div>
             </header>
@@ -105,3 +140,4 @@ function Layout() {
 }
 
 export default Layout
+
