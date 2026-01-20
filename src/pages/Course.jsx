@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { IconArrowLeft, IconChevronLeft, IconChevronRight, IconCheck } from '@tabler/icons-react'
+import { motion } from 'framer-motion'
+import { IconArrowLeft, IconCheck, IconBook, IconPencil, IconQuestionMark, IconForms, IconGripVertical } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import { useCourse } from '../hooks/useCourses'
 import Progress from '../components/ui/Progress'
@@ -19,8 +19,8 @@ function Course() {
     const navigate = useNavigate()
     const { t } = useTranslation()
     const { course, isLoading, updateProgress } = useCourse(id)
-    const [currentModuleIndex, setCurrentModuleIndex] = useState(0)
-    const [moduleCompleted, setModuleCompleted] = useState(false)
+    const [completedModules, setCompletedModules] = useState(new Set())
+    const moduleRefs = useRef({})
 
     useEffect(() => {
         if (!isLoading && !course) {
@@ -28,23 +28,10 @@ function Course() {
             return
         }
 
-        if (course) {
-            // Find first incomplete module
-            const firstIncomplete = course.modules.findIndex(
-                m => !course.completedModules?.includes(m.id)
-            )
-            if (firstIncomplete >= 0) {
-                setCurrentModuleIndex(firstIncomplete)
-            }
+        if (course && course.completedModules) {
+            setCompletedModules(new Set(course.completedModules))
         }
     }, [course, isLoading, navigate])
-
-    useEffect(() => {
-        if (course) {
-            const currentModule = course.modules[currentModuleIndex]
-            setModuleCompleted(course.completedModules?.includes(currentModule?.id) || false)
-        }
-    }, [course, currentModuleIndex])
 
     if (isLoading || !course) {
         return (
@@ -54,65 +41,70 @@ function Course() {
         )
     }
 
-    const currentModule = course.modules[currentModuleIndex]
-    const isFirst = currentModuleIndex === 0
-    const isLast = currentModuleIndex === course.modules.length - 1
+    const handleComplete = async (moduleId) => {
+        await updateProgress(moduleId, true)
+        setCompletedModules(prev => new Set([...prev, moduleId]))
+    }
 
-    const handlePrevious = () => {
-        if (!isFirst) {
-            setCurrentModuleIndex(prev => prev - 1)
+    const scrollToModule = (moduleId) => {
+        if (moduleRefs.current[moduleId]) {
+            moduleRefs.current[moduleId].scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
         }
     }
 
-    const handleNext = () => {
-        if (!isLast) {
-            setCurrentModuleIndex(prev => prev + 1)
-        }
-    }
-
-    const handleComplete = async () => {
-        await updateProgress(currentModule.id, true)
-        setModuleCompleted(true)
-    }
-
-    const renderModule = () => {
+    const renderModule = (module) => {
+        const isCompleted = completedModules.has(module.id)
         const props = {
-            module: currentModule,
-            onComplete: handleComplete
+            module,
+            onComplete: () => handleComplete(module.id)
         }
 
-        switch (currentModule.type) {
+        let ModuleComponent
+        switch (module.type) {
             case 'explanation':
-                return <ExplanationModule {...props} />
+                ModuleComponent = ExplanationModule
+                break
             case 'exercise':
-                return <ExerciseModule {...props} />
+                ModuleComponent = ExerciseModule
+                break
             case 'quiz':
-                return <QuizModule {...props} />
+                ModuleComponent = QuizModule
+                break
             case 'fillblank':
-                return <FillBlankModule {...props} />
+                ModuleComponent = FillBlankModule
+                break
             case 'dragdrop':
-                return <DragDropModule {...props} />
+                ModuleComponent = DragDropModule
+                break
             default:
-                return <ExplanationModule {...props} />
+                ModuleComponent = ExplanationModule
         }
+
+        return <ModuleComponent {...props} />
     }
 
     const getModuleTypeBadge = (type) => {
         const types = {
-            explanation: { label: t('explanation'), variant: 'info' },
-            exercise: { label: t('exercise'), variant: 'warning' },
-            quiz: { label: t('quiz'), variant: 'success' },
-            fillblank: { label: t('fillblank'), variant: 'secondary' },
-            dragdrop: { label: t('dragdrop'), variant: 'secondary' },
-            graph: { label: t('graph'), variant: 'info' },
+            explanation: { label: t('explanation'), variant: 'info', icon: IconBook },
+            exercise: { label: t('exercise'), variant: 'warning', icon: IconPencil },
+            quiz: { label: t('quiz'), variant: 'success', icon: IconQuestionMark },
+            fillblank: { label: t('fillblank'), variant: 'secondary', icon: IconForms },
+            dragdrop: { label: t('dragdrop'), variant: 'secondary', icon: IconGripVertical },
         }
-        const config = types[type] || { label: type, variant: 'secondary' }
+        const config = types[type] || { label: type, variant: 'secondary', icon: IconBook }
         return <Badge variant={config.variant}>{config.label}</Badge>
     }
 
+    const progressPercent = course.modules.length > 0
+        ? Math.round((completedModules.size / course.modules.length) * 100)
+        : 0
+
     return (
         <div className="container">
-            <div className="course-page">
+            <div className="course-page course-page-vertical">
                 {/* Header */}
                 <div className="course-header">
                     <button className="back-btn" onClick={() => navigate('/')}>
@@ -127,76 +119,105 @@ function Course() {
 
                     <div className="course-progress-bar">
                         <div className="progress-info">
-                            <span>{t('moduleOf')} {currentModuleIndex + 1} / {course.modules.length}</span>
-                            <span>{course.progress || 0}% {t('completed')}</span>
+                            <span>{completedModules.size} / {course.modules.length} {t('modules')}</span>
+                            <span>{progressPercent}% {t('completed')}</span>
                         </div>
-                        <Progress value={course.progress || 0} />
+                        <Progress value={progressPercent} />
                     </div>
                 </div>
 
-                {/* Module Navigation */}
-                <div className="modules-nav">
-                    {course.modules.map((mod, index) => (
-                        <button
-                            key={mod.id}
-                            className={`module-nav-item ${index === currentModuleIndex ? 'active' : ''} ${course.completedModules?.includes(mod.id) ? 'completed' : ''}`}
-                            onClick={() => setCurrentModuleIndex(index)}
-                            title={mod.title}
-                        >
-                            {course.completedModules?.includes(mod.id) ? (
-                                <IconCheck size={14} />
-                            ) : (
-                                <span>{index + 1}</span>
-                            )}
-                        </button>
-                    ))}
-                </div>
+                {/* Table of Contents - Sticky sidebar */}
+                <div className="course-layout">
+                    <aside className="course-toc">
+                        <div className="toc-header">
+                            <h3>{t('tableOfContents') || 'Sommaire'}</h3>
+                        </div>
+                        <nav className="toc-nav">
+                            {course.modules.map((mod, index) => (
+                                <button
+                                    key={mod.id}
+                                    className={`toc-item ${completedModules.has(mod.id) ? 'completed' : ''}`}
+                                    onClick={() => scrollToModule(mod.id)}
+                                >
+                                    <span className="toc-number">
+                                        {completedModules.has(mod.id) ? (
+                                            <IconCheck size={14} />
+                                        ) : (
+                                            index + 1
+                                        )}
+                                    </span>
+                                    <span className="toc-title">{mod.title}</span>
+                                </button>
+                            ))}
+                        </nav>
+                    </aside>
 
-                {/* Current Module */}
-                <div className="module-container">
-                    <div className="module-header">
-                        {getModuleTypeBadge(currentModule.type)}
-                        <h2>{currentModule.title}</h2>
-                    </div>
+                    {/* All Modules - Vertical Layout */}
+                    <div className="course-modules-vertical">
+                        {course.modules.map((module, index) => {
+                            const isCompleted = completedModules.has(module.id)
 
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentModule.id}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="module-content"
-                        >
-                            {renderModule()}
-                        </motion.div>
-                    </AnimatePresence>
+                            return (
+                                <motion.div
+                                    key={module.id}
+                                    ref={el => moduleRefs.current[module.id] = el}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                                    className={`module-section ${isCompleted ? 'completed' : ''}`}
+                                >
+                                    <div className="module-section-header">
+                                        <div className="module-section-info">
+                                            <span className="module-number">{t('module') || 'Module'} {index + 1}</span>
+                                            {getModuleTypeBadge(module.type)}
+                                            {isCompleted && (
+                                                <span className="module-completed-badge">
+                                                    <IconCheck size={14} />
+                                                    {t('completed')}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <h2 className="module-section-title">{module.title}</h2>
+                                    </div>
 
-                    {/* Navigation Buttons */}
-                    <div className="module-navigation">
-                        <Button
-                            variant="outline"
-                            onClick={handlePrevious}
-                            disabled={isFirst}
-                            icon={<IconChevronLeft size={20} />}
-                        >
-                            {t('previous')}
-                        </Button>
+                                    <div className="module-section-content">
+                                        {renderModule(module)}
+                                    </div>
 
-                        {!moduleCompleted && currentModule.type === 'explanation' && (
-                            <Button onClick={handleComplete} icon={<IconCheck size={20} />}>
-                                {t('markAsRead')}
-                            </Button>
+                                    {!isCompleted && module.type === 'explanation' && (
+                                        <div className="module-section-footer">
+                                            <Button
+                                                onClick={() => handleComplete(module.id)}
+                                                icon={<IconCheck size={20} />}
+                                            >
+                                                {t('markAsRead')}
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    {/* Separator between modules */}
+                                    {index < course.modules.length - 1 && (
+                                        <div className="module-separator" />
+                                    )}
+                                </motion.div>
+                            )
+                        })}
+
+                        {/* Course Completion */}
+                        {progressPercent === 100 && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="course-completed-banner"
+                            >
+                                <IconCheck size={48} />
+                                <h2>{t('courseCompleted') || 'Cours terminé !'}</h2>
+                                <p>{t('courseCompletedDesc') || 'Félicitations, vous avez terminé ce cours.'}</p>
+                                <Button onClick={() => navigate('/')}>
+                                    {t('backToCourses')}
+                                </Button>
+                            </motion.div>
                         )}
-
-                        <Button
-                            variant={isLast ? 'secondary' : 'primary'}
-                            onClick={isLast ? () => navigate('/') : handleNext}
-                            disabled={!moduleCompleted && currentModule.type !== 'explanation'}
-                        >
-                            {isLast ? t('finishCourse') : t('next')}
-                            {!isLast && <IconChevronRight size={20} />}
-                        </Button>
                     </div>
                 </div>
             </div>

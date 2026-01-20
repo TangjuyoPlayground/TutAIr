@@ -18,7 +18,6 @@ function CreateCourse() {
     const [subject, setSubject] = useState('')
     const [details, setDetails] = useState('')
     const [level, setLevel] = useState('beginner')
-    const [publishToMarket, setPublishToMarket] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -51,7 +50,7 @@ function CreateCourse() {
                 modules: course.modules,
                 lang: course.lang || i18n.language,
                 tags: course.tags || [],
-                isPublic: publishToMarket,
+                isPublic: true,
             })
 
             navigate(`/course/${courseId}`)
@@ -119,19 +118,6 @@ function CreateCourse() {
                                         </button>
                                     ))}
                                 </div>
-                            </div>
-
-                            <div className="form-group publish-option">
-                                <label className="checkbox-label">
-                                    <input
-                                        type="checkbox"
-                                        checked={publishToMarket}
-                                        onChange={(e) => setPublishToMarket(e.target.checked)}
-                                        disabled={loading}
-                                    />
-                                    <span>{t('publishToMarket')}</span>
-                                </label>
-                                <p className="publish-hint">{t('publishToMarketHint')}</p>
                             </div>
 
                             {error && <div className="error-message">{error}</div>}
